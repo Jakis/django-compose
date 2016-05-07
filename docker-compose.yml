@@ -2,8 +2,11 @@ version: '2'
 services:
   db:
     image: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
     networks:
       - web
+    restart: always
   web:
     build: .
     image: web
@@ -16,13 +19,17 @@ services:
       - db
     networks:
       - web
+    restart: always
   jnginx:
     build: ./jnginx
+    depends_on:
+      - web
     volumes:
       - .:/code
     ports:
       - "80:80"
     networks:
       - web
+    restart: always
 networks:
   web:
