@@ -2,6 +2,10 @@ version: '2'
 services:
   db:
     image: postgres
+    volumes:
+      - "/etc/postgresql"
+      - "/var/log/postgresql"
+      - "/var/lib/postgresql"
     networks:
       - web
   web:
@@ -18,6 +22,9 @@ services:
       - web
   jnginx:
     build: ./jnginx
+    depends_on:
+      - web
+      - db
     volumes:
       - .:/code
     ports:
